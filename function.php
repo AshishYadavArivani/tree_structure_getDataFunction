@@ -44,7 +44,64 @@ class HomeController extends Controller
                 }
                 $json_child_data=json_encode($arr_data1);
                 $array_child_data=json_decode($json_child_data);
+                
+                // echo gettype($array_child_data);
+                $spc=60;
+                echo "<div style='border:1px solid aqua;width: fit-content;margin-left:{$spc}px;text-align:left;padding:20px;box-shadow: 15px 15px 10px #888888 inset;font-size:19px;font-weight:normal;font-family:algerian'>";
+                echo "<br/>";
+                //if()
+                echo "id =>".$array_child_data->id;
+                echo "<br/>";
+                echo "Name =>".$array_child_data->Name;
+                echo "<br/>";
+                echo " Child =>";
+                
+                $this->print_json($array_child_data,$spc);
+                echo "</div>";
                 dd($arr_data1,$json_child_data,$array_child_data);
+                
+
+
+        }
+
+        public function print_json($data,$spc)
+        {
+          if(gettype($data->child) === 'array')
+          {
+          
+            if(count($data->child)>0)
+            { 
+                    $i=0;
+                    for($i=0;$i<count($data->child);$i++)
+                    {  
+                        echo "<div style='border:1px solid aqua;width: fit-content;margin-left:{$spc}px;text-align:left;padding:20px;box-shadow: 15px 15px 10px #888888 inset;'>";
+                        
+                        echo "<br/>";
+                        echo "<span > id =>".$data->child[$i]->id."</span>";
+                        echo "<br/>";
+                        echo "<span> Name =>".$data->child[$i]->Name."</span>";
+                        echo "<br/>";
+                        echo "<span > Child =></span>";
+                       
+                        $j=0;
+                    if(gettype($data->child[$i]->child) === 'array')
+                    {   
+                       
+                        $j=60; 
+                        $spc=($spc+$j);
+                        $this->print_json($data->child[$i],$spc);
+                        
+                    }
+                    $spc=($spc-$j);  
+                    
+                    echo "</div>";
+                    }
+                    
+                    // echo "<span style='margin-left: 30px; padding:5px;'> id =>".$child->id."</span>";   
+                }
+            // }
+        }
+            
         }
     
 //====================================== /MAIN FUNCTION FOR GETING DATA FROM DATABASE IN TREE STRUCTURE ========================================================================>  
@@ -84,7 +141,7 @@ class HomeController extends Controller
                     
                         if($multi_arr2[0] == null )
                         {
-                        echo "null data";
+                       
                         $multi_arr2='';
                         }
 
